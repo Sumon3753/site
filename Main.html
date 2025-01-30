@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>IP Graber</title>
+</head>
+<body>
+    <h1>IP Graber</h1>
+    
+    <input type="password" id="codeLock" placeholder="Enter the code">
+    <button onclick="checkCode()">Submit</button>
+    
+    <div id="ipContainer" style="display: none;">
+        <p>Your IP address is: <span id="ipAddress"></span></p>
+        <p>IP Address History:</p>
+        <ul id="ipHistory"></ul>
+    </div>
+    
+    <script>
+        function checkCode() {
+            var code = document.getElementById("codeLock").value;
+            if (code === "1234") {
+                // Show the IP address
+                document.getElementById("ipContainer").style.display = "block";
+                getIP();
+            } else {
+                alert("Incorrect code. Please try again.");
+            }
+        }
+        
+        function getIP() {
+            fetch('https://api.ipify.org?format=json')
+                .then(response => response.json())
+                .then(data => {
+                    var ipAddress = data.ip;
+                    document.getElementById("ipAddress").textContent = ipAddress;
+                    addToHistory(ipAddress);
+                });
+        }
+        
+        function addToHistory(ipAddress) {
+            var historyList = document.getElementById("ipHistory");
+            var historyItem = document.createElement("li");
+            historyItem.textContent = ipAddress;
+            historyList.appendChild(historyItem);
+        }
+    </script>
+</body>
+</html>
